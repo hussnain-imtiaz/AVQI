@@ -11,7 +11,7 @@ import os.path
 
 # Initialize the parameters
 confThreshold = 0.3 #Confidence threshold
-nmsThreshold = 0.6   #Non-maximum suppression threshold
+nmsThreshold = 0.6  #Non-maximum suppression threshold
 
 parser = argparse.ArgumentParser(description='Object Detection using YOLO in OPENCV')
 parser.add_argument('--image', help='Path to image file.')
@@ -20,9 +20,9 @@ args = parser.parse_args()
 
 # Load names of classes from coco
 
-classes = open('Configs/coco.names').read().strip().split('\n')
+classes = open('Configs/coco-v2.names').read().strip().split('\n')
 
-net = cv2.dnn.readNetFromDarknet("Configs/custom-yolov3-tiny-detector.cfg", "Configs/custom-yolov3-tiny-detector_best.weights")
+net = cv2.dnn.readNetFromDarknet("Configs/custom-yolov3-tiny-detector-v2.cfg", "Configs/custom-yolov3-tiny-detector_best-v2.weights")
 net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
 
@@ -37,7 +37,7 @@ def getOutputsNames(net):
 # Draw the predicted bounding box
 def drawPred(classId, conf, left, top, right, bottom):
     # Draw a bounding box.
-    cv2.rectangle(frame, (left, top), (right, bottom), (155, 78, 50), 3)
+    cv2.rectangle(frame, (left, top), (right, bottom), (15, 78, 50), 3)
 
     label = '%.2f' % conf
 
@@ -47,9 +47,9 @@ def drawPred(classId, conf, left, top, right, bottom):
         label = '%s:%s' % (classes[classId], label)
 
     #Display the label at the top of the bounding box
-    labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
+    labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 1, 2)
     top = max(top, labelSize[1])
-    cv2.rectangle(frame, (left, top - round(1.5*labelSize[1])), (left + round(1.5*labelSize[0]), top + baseLine), (255, 255, 255), cv2.FILLED)
+    cv2.rectangle(frame, (left, top - round(labelSize[1])), (left + round(labelSize[0]), top + baseLine), (25, 255, 255), cv2.FILLED)
     cv2.putText(frame, label, (left, top), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0,0,0), 1)
 
 # Remove the bounding boxes with low confidence using non-maxima suppression
